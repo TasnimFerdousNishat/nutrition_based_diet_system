@@ -22,7 +22,6 @@ Route::middleware([
 
   
 
-    Route::get('/admindashboard',[AdminController::class, 'view']);
 
     Route::post('/bmi/store', [BmiController::class, 'store'])->name('bmi.store');
 
@@ -51,6 +50,15 @@ Route::middleware([
 
         return view('register_consultant');
     });
+
+
+
+
+    #admin routes 
+
+    Route::post('/admin/store-food', [AdminController::class, 'storeFoodSuggestion'])->name('admin.storeFood');
+
+    Route::get('/admindashboard',[AdminController::class, 'view']);
    
 
 });

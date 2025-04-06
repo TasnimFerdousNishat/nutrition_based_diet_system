@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BmiRecord;
 use App\Models\UserInfo;
+use App\Models\FoodSuggestion;
 use Auth;
 use Carbon\Carbon;
+
+
 
 
 class BmiController extends Controller
@@ -46,15 +49,67 @@ public function store(Request $request)
         'bmi' => $bmi,
     ]);
 
-    return redirect('/dashboard')->with('success', 'BMI calculated successfully!');
+    return redirect('/dashboard');
 }
 
     public function showDashboard()
     {
         $userId = Auth::id();
+
         $bmiRecords = BmiRecord::where('user_id', $userId)->orderBy('created_at')->get();
 
-        return view('dashboard', compact('bmiRecords'));
+        $bmi = BmiRecord::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->value('bmi');
+
+
+        if($bmi<18.5 && $bmi>0){
+
+            $bmi_cond = "UnderWeight";
+
+            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Underweight')->get();
+
+            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+
+        }
+
+
+        elseif ($bmi>18.5 && $bmi<24.9) {
+
+            $bmi_cond = "Normal";
+            
+            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Normal')->get();
+
+            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+        }
+
+
+        elseif($bmi>25 && $bmi<29.9){
+
+
+            $bmi_cond = "Overweight";
+
+            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Overweight')->get();
+
+            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+
+            
+        }
+
+
+        elseif ($bmi>30) {
+
+            $bmi_cond= "Obese";
+
+
+            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Obese')->get();
+
+            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+          
+        }
+
+
+        
     }
 
     public function bmi_view()
@@ -63,9 +118,8 @@ public function store(Request $request)
     }
 
 
-
-
-    public  function input_details(){
+    public  function input_details()
+    {
 
         return view('input_details');
     } 

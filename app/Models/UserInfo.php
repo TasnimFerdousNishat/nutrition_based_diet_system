@@ -20,8 +20,8 @@ class UserInfo extends Model
         'gender', 
         'address', 
         'contact', 
-        'em_contact', 
-        'diabetes', 
+        'em_contact',
+        'diabetes',
         'menstrual_cycle', 
         'description'
     ];

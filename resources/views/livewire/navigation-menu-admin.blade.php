@@ -112,15 +112,15 @@
                                 {{ __('Notifications') }}
                             </div>
 
-                            <!-- Example Notifications -->
+                           
                             <x-dropdown-link href="#">
-                                🔔 You have 3 new messages
+                                🔔 Messeges
                             </x-dropdown-link>
                             <x-dropdown-link href="#">
-                                📌 System update available
+                                📌 Important Deadlines
                             </x-dropdown-link>
                             <x-dropdown-link href="#">
-                                📝 New comment on your post
+                                📝 Orders
                             </x-dropdown-link>
 
                             <div class="border-t border-gray-200"></div>
@@ -148,9 +148,6 @@
                             </div>
 
                             <!-- Example Notifications -->
-                            <x-dropdown-link href="#">
-                                Add Food Suggestions
-                            </x-dropdown-link>
 
                             <x-dropdown-link href="#">
                                 Add Excercises

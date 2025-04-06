@@ -34,7 +34,7 @@
                     @if (Route::has('login'))
                         @auth
                             <li class="nav-item">
-                                <a class="btn" href="{{ url('/dashboard') }}" style="border: 2px solid rgb(71, 150, 10); color: rgb(71, 150, 10);">Dashboard</a>
+                                <a class="btn" href="{{ route('dashboard') }}" style="border: 2px solid rgb(71, 150, 10); color: rgb(71, 150, 10);">Dashboard</a>
                             </li>
                         @else
                         <li class="nav-item me-2">
