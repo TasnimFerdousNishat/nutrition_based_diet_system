@@ -65,7 +65,6 @@
                     </div>
                 @endif
 
-                 <!-- Notifications Dropdown -->
                  <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -80,12 +79,20 @@
                             </div>
 
                             <!-- Example Notifications -->
-                            <x-dropdown-link href="/register_vendor">
-                                Register As Vendor
-                            </x-dropdown-link>
+                            @if (!$is_consultant || ($is_consultant && !$is_consultant->approved))
                             <x-dropdown-link href="/register_consultant">
                                 Register As Consultant
                             </x-dropdown-link>
+                            
+                            @else
+
+                            <x-dropdown-link >
+                                You are already Consultant.
+                            </x-dropdown-link>
+
+                            @endif
+
+
                            
 
                             <div class="border-t border-gray-200"></div>
@@ -94,40 +101,37 @@
                 </div>
 
                 <!-- Notifications Dropdown -->
-                <div class="ms-3 relative">
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
-                                <svg class="size-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405a2.032 2.032 0 00-.595-1.382 4.978 4.978 0 01-1.34-3.535V9a6 6 0 10-12 0v1.678a4.978 4.978 0 01-1.34 3.535 2.032 2.032 0 00-.595 1.382L4 17h5m6 0a3 3 0 01-6 0" />
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <!-- Medicine Notifications -->
+                    @if($upcoming_medicines->count())
+                        <div class="relative mr-4">
+                            <button class="relative text-red-600 hover:text-red-800 focus:outline-none" title="Upcoming Medicines">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                 </svg>
+                                <span class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-1 text-xs">
+                                    {{ $upcoming_medicines->count() }}
+                                </span>
                             </button>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Notifications') }}
+    
+                            <div class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 shadow-lg rounded-lg z-50 p-2">
+                                <p class="font-semibold text-sm text-gray-700 mb-1">Upcoming in 15 mins</p>
+                                <ul class="max-h-40 overflow-y-auto">
+                                    @foreach($upcoming_medicines as $medicine)
+                                        <li class="text-sm text-gray-600 border-b py-1">
+                                            {{ $medicine->medicine_name }}
+                                            <br>
+                                            <span class="text-xs text-gray-500">
+                                                at {{ \Carbon\Carbon::parse($medicine->schedule_time)->format('h:i A') }}
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
-
-                            <!-- Example Notifications -->
-                            <x-dropdown-link href="#">
-                                🔔 You have 3 new messages
-                            </x-dropdown-link>
-                            <x-dropdown-link href="#">
-                                📌 System update available
-                            </x-dropdown-link>
-                            <x-dropdown-link href="#">
-                                📝 New comment on your post
-                            </x-dropdown-link>
-
-                            <div class="border-t border-gray-200"></div>
-
-                            <x-dropdown-link href="#">
-                                {{ __('View All Notifications') }}
-                            </x-dropdown-link>
-                        </x-slot>
-                    </x-dropdown>
-                </div>
+                        </div>
+                    @endif
 
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">

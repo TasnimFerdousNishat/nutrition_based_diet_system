@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\BmiRecord;
 use App\Models\UserInfo;
 use App\Models\FoodSuggestion;
+use App\Models\MedicineSchedule;
+use App\Models\Exercise;
+
+use App\Models\FestiveFood;
 use Auth;
 use Carbon\Carbon;
 
@@ -19,6 +23,8 @@ class BmiController extends Controller
     $userId = Auth::id();
 
     $today = Carbon::today();
+
+    
 
     $existingRecord = BmiRecord::where('user_id', $userId)
         ->whereDate('created_at', $today)
@@ -53,8 +59,14 @@ public function store(Request $request)
 }
 
     public function showDashboard()
+
+
     {
+        
+        
         $userId = Auth::id();
+
+        
 
         $bmiRecords = BmiRecord::where('user_id', $userId)->orderBy('created_at')->get();
 
@@ -67,9 +79,12 @@ public function store(Request $request)
 
             $bmi_cond = "UnderWeight";
 
-            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Underweight')->get();
+            $food_suggestion_data = $food_suggestion_data = FoodSuggestion::where('bmi_levels', 'like', '%Underweight%')->get();
 
-            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+
+            
+
+            return view('dashboard', compact('bmi','bmiRecords','food_suggestion_data','bmi_cond'));
 
         }
 
@@ -78,9 +93,12 @@ public function store(Request $request)
 
             $bmi_cond = "Normal";
             
-            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Normal')->get();
+            $food_suggestion_data = FoodSuggestion::where('bmi_levels', 'like', '%Normal%')->get();
 
-            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+
+
+
+            return view('dashboard', compact('bmi','bmiRecords','food_suggestion_data','bmi_cond',));
         }
 
 
@@ -89,9 +107,12 @@ public function store(Request $request)
 
             $bmi_cond = "Overweight";
 
-            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Overweight')->get();
+            
 
-            return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
+            $food_suggestion_data = FoodSuggestion::where('bmi_levels', 'like', '%Overweight%')->get();
+
+
+            return view('dashboard', compact('bmi','bmiRecords','food_suggestion_data','bmi_cond'));
 
             
         }
@@ -102,10 +123,22 @@ public function store(Request $request)
             $bmi_cond= "Obese";
 
 
-            $food_suggestion_data = FoodSuggestion::whereJsonContains('bmi_levels', 'Obese')->get();
+            $food_suggestion_data = FoodSuggestion::where('bmi_levels', 'like', '%Obese%')->get();
+
+            return view('dashboard', compact('bmi','bmiRecords','food_suggestion_data','bmi_cond'));
+          
+        }
+
+
+        else {
+
+            $bmi_cond= "Null";
+
+
+            $food_suggestion_data = "Null";
 
             return view('dashboard', compact('bmiRecords','food_suggestion_data','bmi_cond'));
-          
+
         }
 
 
@@ -123,6 +156,137 @@ public function store(Request $request)
 
         return view('input_details');
     } 
+
+
+
+    public function food_details($id){
+
+
+
+
+        $food_details_data = FoodSuggestion::find($id);
+
+
+        return view('food_details', compact('food_details_data'));
+
+        
+    }
+
+
+
+
+   
+
+
+    public function show_exer()
+    {
+
+        $userId = Auth::id();
+      
+        $bmi = BmiRecord::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->value('bmi');
+    
+
+        if($bmi<18.5 && $bmi>0){
+
+            $bmi_cond = "UnderWeight";
+
+            $exercises= Exercise::where('bmi_levels', 'like', '%Underweight%')->get();
+
+
+            
+
+            return view('show_exercise', compact('exercises','bmi_cond'));
+
+        }
+
+
+        elseif ($bmi>18.5 && $bmi<24.9) {
+
+            $bmi_cond = "Normal";
+            
+            $exercises= Exercise::where('bmi_levels', 'like', '%Normal%')->get();
+
+
+            
+
+            return view('show_exercise', compact('exercises','bmi_cond'));
+        }
+
+
+        elseif($bmi>25 && $bmi<29.9){
+
+
+            $bmi_cond = "Overweight";
+
+            
+
+            $exercises= Exercise::where('bmi_levels', 'like', '%Overweight%')->get();
+
+
+            
+
+            return view('show_exercise', compact('exercises','bmi_cond'));
+
+            
+        }
+
+
+        elseif ($bmi>30) {
+
+
+            $bmi_cond = "obese";
+
+            $exercises= Exercise::where('bmi_levels', 'like', '%Obeset%')->get();
+
+
+            
+
+            return view('show_exercise', compact('exercises','bmi_cond'));
+          
+        }
+
+
+        else {
+
+            $bmi_cond= "Null";
+
+
+            $exercises = collect();
+
+
+            
+
+            return view('show_exercise', compact('exercises','bmi_cond'));
+
+        }
+
+
+
+    }
+
+
+    public function other_diet()
+{
+    $festiveFoods = FestiveFood::all();
+
+   
+    return view('other_diet', compact('festiveFoods'));
+}
+
+
+public function show($id)
+{
+    $food = FestiveFood::findOrFail($id);
+    return response()->json([
+        'name' => $food->name,
+        'description' => $food->description,
+        'ingredients' => $food->ingredients ?? [],
+        'bmi_levels' => $food->bmi_levels ?? [],
+    ]);
+}
+
 
     
 }
