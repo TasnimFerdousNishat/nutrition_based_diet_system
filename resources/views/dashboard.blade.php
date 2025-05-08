@@ -1,9 +1,8 @@
+
+
 <x-app-layout>
 
     <body>
-        
-   
-
         
 
   
@@ -33,10 +32,30 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-white d-flex align-items-center">
-                        <span class="sidebar-text">Foods</span>
+                    <a href="{{url('/foods')}}" class="nav-link text-white d-flex align-items-center">
+                        <span class="sidebar-text">Recipies</span>
                     </a>
                 </li>
+
+
+                <li class="nav-item">
+                    <a href="{{url('/menu')}}" class="nav-link text-white d-flex align-items-center">
+                        <span class="sidebar-text">Order Food</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{url('/my-orders')}}" class="nav-link text-white d-flex align-items-center">
+                        <span class="sidebar-text">Your Orders</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{url('/medicine')}}" class="nav-link text-white d-flex align-items-center">
+                        <span class="sidebar-text">Medicine Schedule</span>
+                    </a>
+                </li>
+
 
                 <li class="nav-item">
                     <a href="#" class="nav-link text-white d-flex align-items-center">
@@ -54,6 +73,20 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{url('/other_diet')}}" class="nav-link text-white d-flex align-items-center" id="InputDetailsLink">
+                        <span class="sidebar-text">Festive-wise Diet Plan</span>
+                    </a>
+                </li>
+
+                
+                <li class="nav-item">
+                    <a href="{{ route('exercise.show') }}" class="nav-link text-white d-flex align-items-center" id="InputDetailsLink">
+                        <span class="sidebar-text">See Exercises</span>
+                    </a>
+                    
+                </li>
+
                
 
             </ul>
@@ -63,6 +96,8 @@
         <div id="main-content" class="flex-grow-1 p-4">
             <h1 class="fw-bold text-center " style=" background-color:rgba(103, 239, 85, 0.981); ">Dashboard</h1>
 
+
+          
 
                 @if (session('error'))
 
@@ -89,7 +124,7 @@
     @endif
 
 
-            <p class="text-center">Welcome to your dashboard.</p>
+            <p class="text-center">Welcome to your dashboard</p>
 
     <div class="col py-3 my-5 d-flex justify-content-center">
         <div class="d-flex gap-2 ">
@@ -99,7 +134,7 @@
             <div class="card text-center w-full">
                 <div class="card-body" style="background:#f78e0d;border: 2px solid rgb(153, 57, 5);">
                     <h5 class="card-title text-white">Your BMI level is {{$bmi_cond}}</h5>
-                    <p class="card-text text-white">Broo! You need to eat as fuck! </p>
+                    <p class="card-text text-white"> Broo! You need to eat a lot! </p>
                 </div>
             </div>
           
@@ -111,7 +146,7 @@
             <div class="card text-center w-full justify-content-center">
                 <div class="card-body" style="background:#26d707; border: 2px solid rgb(5, 153, 5);">
                     <h5 class="card-title text-white">Your BMI level is {{$bmi_cond}}</h5>
-                    <p class="card-text text-white">Damn! You are good ! </p>
+                    <p class="card-text text-white"> Damn! You are good! </p>
                 </div>
             </div>
            
@@ -121,7 +156,7 @@
                 <div class="card text-center w-full">
                     <div class="card-body" style="background:#ffee01;border: 2px solid rgb(151, 153, 5);">
                         <h5 class="card-title text-white">Your BMI level is {{$bmi_cond}}</h5>
-                        <p class="card-text text-white"> Ahhh! You need to slow down your Eating a bit ! </p>
+                        <p class="card-text text-white"> Ahhh! You need to slow down your eating a bit! </p>
                     </div>
                 </div>
             
@@ -131,10 +166,19 @@
                 <div class="card text-center w-full">
                     <div class="card-body" style="background:#fe0d0d;border: 2px solid rgb(153, 10, 5);">
                         <h5 class="card-title text-white">Your BMI level is {{$bmi_cond}}</h5>
-                        <p class="card-text text-white"> Holy shit! You are gonna die soon! </p>
+                        <p class="card-text text-white"> Hey! You need to control your eating! </p>
                     </div>
                 </div>
-            
+
+
+            @else
+
+            <div class="card text-center w-full">
+                <div class="card-body" style="background:#059d72;border: 2px solid rgb(95, 221, 214);">
+                    <h5 class="card-title text-white">You Don't Have Any BMI Record</h5>
+                    <p class="card-text text-white"> Check BMI  </p>
+                </div>
+            </div>
 
             @endif
 
@@ -156,12 +200,19 @@
             
             <div class="suggestions" style="margin-top: 70px">
 
+
+                @if ($bmi_cond!="Null")
+
                 <h1 class="text-center" >Here We will show the suggestions</h1>
+
+                @endif
+
+                @if ($food_suggestion_data != "Null")
              
                 <div class="row justify-content-center mt-4" id="suggestionsContainer" style="display: none;">
                     @foreach($food_suggestion_data as $food_data)
                     <div class="col-md-4 d-flex justify-content-center">
-                        <a href="\welcome" style="text-decoration: none;">
+                        <a href="{{url('food_details/show/')}}/{{$food_data->id}}" style="text-decoration: none;">
                             <div class="card text-center suggestion-item" 
                                 style="width: 250px; height: 300px; margin: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); border-radius: 10px; border: 3px solid #00ca0d; 
                                 background-image: url('{{ asset('storage/' . $food_data->photo) }}'); 
@@ -179,7 +230,18 @@
                     </div>
                     @endforeach
                 </div>
-                
+
+                @else
+
+
+                <div class="no text-center w-full"  style=" display:flex;  flex-direction:column; justify-content:center; width:900px; margin-left:240px;">
+                    <h1 class="text-center "  >You Dont Have any Suggestion Right now</h1>
+                    <a class="btn  btn-sm" href="{{url("/bmi_calculator")}}"  style="width: 300px; margin-left:300px; border: 3px solid rgb(3, 104, 90); background-color:#059d72; color:#fbfbfb"> Click Here To check BMI</a>
+                </div>
+         
+
+
+            @endif
            
             </div>
             
@@ -196,11 +258,15 @@
     let suggestionsDropdown = document.getElementById("suggestionsDropdown");
     let suggestionsContainer = document.getElementById("suggestionsContainer");
 
+   
+
     function toggleSuggestions() {
         if (suggestionsDropdown.value === "Yes") {
-            suggestionsContainer.style.display = "flex";  // Show suggestions in a flex container
+            suggestionsContainer.style.display = "flex"; 
+          // Show suggestions in a flex container
         } else {
-            suggestionsContainer.style.display = "none"; // Hide suggestions
+            suggestionsContainer.style.display = "none";
+             // Hide suggestions
         }
         localStorage.setItem("suggestionsSetting", suggestionsDropdown.value);
     }

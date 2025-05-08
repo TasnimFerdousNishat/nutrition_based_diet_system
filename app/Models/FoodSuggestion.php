@@ -20,4 +20,10 @@ class FoodSuggestion extends Model
         'photo',
         'description',
     ];
+
+    protected $casts = [
+        'ingredients' => 'array',
+        'bmi_levels' => 'array',
+        'nutrition_info' => 'array',
+    ];
 }

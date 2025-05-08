@@ -150,10 +150,10 @@
                             <!-- Example Notifications -->
 
                             <x-dropdown-link href="#">
-                                Add Excercises
+                                Add Food To shop
                             </x-dropdown-link>
 
-                            <x-dropdown-link href="#">
+                            <x-dropdown-link href="{{url('add_food_recipe')}}">
                                 Add Recipies
                             </x-dropdown-link>
                            

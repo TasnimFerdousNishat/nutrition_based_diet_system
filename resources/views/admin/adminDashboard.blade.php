@@ -68,8 +68,15 @@
 
                 <div class="card text-center w-full">
                     <div class="card-body" style="background:#ffac53;">
-                        <h5 class="card-title text-white">Active Users</h5>
-                        <p class="card-text text-white">this Feature will be available in the future </p>
+                        <h5 class="card-title text-white">Orders</h5>
+                        <a href="{{url('/admin/orders/pending')}}">view</a>
+                    </div>
+                </div>
+
+                <div class="card text-center w-full">
+                    <div class="card-body" style="background:#ffac53;">
+                        <h5 class="card-title text-white">Approved Orders</h5>
+                        <a href="{{url('/admin/orders/approved')}}">view</a>
                     </div>
                 </div>
 
@@ -83,8 +90,10 @@
 
                  <div class="card text-center w-full">
                     <div class="card-body" style="background:#4be210;">
-                        <h5 class="card-title text-white">Active Consultants</h5>
-                        <p class="card-text text-white">this Feature will be available in the future </p>
+                        <a href="{{url('/approve_consultant')}}"></a>
+                        <h5 class="card-title text-white">Consultants Request</h5>
+                        <p class="card-text text-white">{{$consultant_request}} </p>
+                        <a href="{{url('/approve_consultant')}}">view</a>
                     </div>
                 </div>
 
@@ -173,15 +182,218 @@
                 </div>
             </form>
         </div>
+
+
+
+        <div class="text-center mt-6 my-5">
+            <button onclick="toggleFoodForm2()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" style="background-color: rgb(163, 234, 58);">Add Food to shop</button>
+        </div>
+
+
+
+
         
+        <div id="foodForm2" class="container text-center mx-auto max-w-lg p-6 bg-white rounded-lg shadow-lg mt-6 hidden">
+            <h2 class="text-2xl font-semibold text-center mb-4" style="margin-bottom: 30px;">Add Food to Shop</h2>
+            <hr>
+            @if(session('success'))
+                <div class="bg-green-100 text-green-800 p-2 mb-4 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
+            <form action="{{route('admin.storeFood2')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                
+                <label class="block text-gray-700">Item Name:</label>
+                <input type="text" name="name" class="w-50 p-2 border rounded mb-4" required>
 
+                <br>
+                <label class="block text-gray-700">Suitable for BMI Levels:</label>
+                <br>
+                <div class="mb-4 ">
+                    <input type="checkbox" name="bmi_levels[]" value="Underweight"> Underweight
+                    <input type="checkbox" name="bmi_levels[]" value="Normal"> Normal
+                    <input type="checkbox" name="bmi_levels[]" value="Overweight"> Overweight
+                    <input type="checkbox" name="bmi_levels[]" value="Obese"> Obese
+                </div>
+                
+                <label class="block text-gray-700">Meal Time:</label>
+                <select name="meal_time" class="w-50 p-2 border rounded mb-4">
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snack">Snack</option>
+                </select>
 
+                <label class="block text-gray-700">Nutrition Information:</label>
+                <div id="nutrition-container2">
+                    <input type="text" name="nutrition_info2[]" class="w-50 p-2 border rounded mb-2">
+                </div>
+                <button type="button" onclick="addNutrition2()" class="bg-blue-500 text-white px-2 py-1 rounded" style="background-color: aqua;">Add More</button>
+                
+                <label class="block text-gray-700" style="margin-top: 10px;">Meal Photo:</label>
+                <input type="file" name="photo" class="w-50 p-2 border rounded mb-4" accept="image/*" required>
 
+                <label class="block text-gray-700" style="margin-top: 10px;">Price</label>
+                <input type="number" name="price" class="w-50 p-2 border rounded mb-4" required>
 
-
-
+                <label class="block text-gray-700">Description:</label>
+                <textarea name="description" class="w-50 p-2 border rounded mb-4" required></textarea>
+                
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded" style="background-color: rgb(51, 188, 1)">Submit</button>
+                </div>
+            </form>
+        </div>
 
     </div>
+
+
+
+
+    
+    <div class="text-center mt-6 my-5">
+        <button onclick="toggleFoodForm3()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" style="background-color: rgb(163, 234, 58);">Add Excercise</button>
+    </div>
+
+
+
+
+    
+    <div id="foodForm3" class="container text-center mx-auto max-w-lg p-6 bg-white rounded-lg shadow-lg mt-6 hidden">
+        <h2 class="text-2xl font-semibold text-center mb-4" style="margin-bottom: 30px;">Add Excercise</h2>
+        <hr>
+        @if(session('success'))
+            <div class="bg-green-100 text-green-800 p-2 mb-4 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        <form action="{{ route('exercise.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <label class="block text-gray-700">Excercise Name:</label>
+            <input type="text" name="name" class="w-50 p-2 border rounded mb-4" required>
+
+            <br>
+            <label class="block text-gray-700">Suitable for BMI Levels:</label>
+            <br>
+            <div class="mb-4 ">
+                <input type="checkbox" name="bmi_levels[]" value="Underweight"> Underweight
+                <input type="checkbox" name="bmi_levels[]" value="Normal"> Normal
+                <input type="checkbox" name="bmi_levels[]" value="Overweight"> Overweight
+                <input type="checkbox" name="bmi_levels[]" value="Obese"> Obese
+            </div>
+            
+            <label class="block text-gray-700">Excercise Time:</label>
+            <select name="excercise_time" class="w-50 p-2 border rounded mb-4">
+                <option value="Morning">Morning</option>
+                <option value="Evening">Evening</option>
+                
+            </select>
+
+            <label class="block text-gray-700">Excercise Outcome</label>
+            <div id="nutrition-container3">
+                <input type="text" name="excercise_outcome[]" class="w-50 p-2 border rounded mb-2">
+            </div>
+            <button type="button" onclick="addNutrition3()" class="bg-blue-500 text-white px-2 py-1 rounded" style="background-color: aqua;">Add More</button>
+            
+            <label class="block text-gray-700" style="margin-top: 10px;"> Photo:</label>
+            <input type="file" name="photo" class="w-50 p-2 border rounded mb-4" accept="image/*" required>
+
+            <label class="block text-gray-700 mt-2">Duration</label>
+          
+                <input type="number" name="hours" min="0" placeholder="Hours" class="w-24 p-2 border rounded" required>
+                <input type="number" name="minutes" min="0" max="59" placeholder="Minutes" class="w-24 p-2 border rounded" required style="margin-bottom:10px; ">
+                
+            
+            
+            
+
+            <label class="block text-gray-700">Description:</label>
+            <textarea name="description" class="w-50 p-2 border rounded mb-4" required></textarea>
+            
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded" style="background-color: rgb(51, 188, 1)">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+
+
+    <div class="text-center mt-6 my-5">
+        <button onclick="toggleFoodForm4()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" style="background-color: rgb(163, 234, 58);">Add Festive wise food Plan</button>
+    </div>
+
+
+
+
+    
+    <div id="foodForm4" class="container text-center mx-auto max-w-lg p-6 bg-white rounded-lg shadow-lg mt-6 hidden">
+        <h2 class="text-2xl font-semibold text-center mb-4" style="margin-bottom: 30px;">Add Festive Food</h2>
+        <hr>
+        @if(session('success'))
+            <div class="bg-green-100 text-green-800 p-2 mb-4 rounded">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        <form action="{{route('festivefood.store')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <label class="block text-gray-700">Food Name:</label>
+            <input type="text" name="name" class="w-50 p-2 border rounded mb-4" required>
+
+            <label class="block text-gray-700">Festive Name</label>
+            <input type="text" name="festname" class="w-50 p-2 border rounded mb-4" required>
+
+            <br>
+            <label class="block text-gray-700">Suitable for BMI Levels:</label>
+            <br>
+            <div class="mb-4 ">
+                <input type="checkbox" name="bmi_levels[]" value="Underweight"> Underweight
+                <input type="checkbox" name="bmi_levels[]" value="Normal"> Normal
+                <input type="checkbox" name="bmi_levels[]" value="Overweight"> Overweight
+                <input type="checkbox" name="bmi_levels[]" value="Obese"> Obese
+            </div>
+            
+            <label class="block text-gray-700" style="margin-top: 10px;"> Photo:</label>
+            <input type="file" name="photo" class="w-50 p-2 border rounded mb-4" accept="image/*" required>
+
+
+             
+            <label class="block text-gray-700">Ingredients:</label>
+            <div id="ingredients-container2">
+                <input type="text" name="ingredients2[]" class="w-50 p-2 border rounded mb-2">
+            </div>
+            <button type="button" onclick="addIngredient2()" class="bg-blue-500 text-white px-2 py-1 rounded" style="background-color: blueviolet">Add More</button>
+            <br>
+            <br>
+            
+            
+            
+
+            <label class="block text-gray-700">Recipe:</label>
+            <textarea name="description" class="w-50 p-2 border rounded mb-4" required></textarea>
+            
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded" style="background-color: rgb(51, 188, 1)">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
 
     @stack('modals')
 
@@ -259,11 +471,35 @@
             document.getElementById('foodForm').classList.toggle('hidden');
         }
 
+    function toggleFoodForm2() {
+            document.getElementById('foodForm2').classList.toggle('hidden');
+        }
+
+    
+        function toggleFoodForm3() {
+            document.getElementById('foodForm3').classList.toggle('hidden');
+        }
+
+        function toggleFoodForm4() {
+            document.getElementById('foodForm4').classList.toggle('hidden');
+        }
+
+
         function addIngredient() {
             let container = document.getElementById('ingredients-container');
             let input = document.createElement('input');
             input.type = 'text';
             input.name = 'ingredients[]';
+            input.classList.add('w-full', 'p-2', 'border', 'rounded', 'mb-2');
+            container.appendChild(input);
+        }
+
+
+        function addIngredient2() {
+            let container = document.getElementById('ingredients-container2');
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'ingredients2[]';
             input.classList.add('w-full', 'p-2', 'border', 'rounded', 'mb-2');
             container.appendChild(input);
         }
@@ -273,6 +509,27 @@
             let input = document.createElement('input');
             input.type = 'text';
             input.name = 'nutrition_info[]';
+            input.classList.add('w-full', 'p-2', 'border', 'rounded', 'mb-2');
+            container.appendChild(input);
+        }
+
+
+
+        function addNutrition2() {
+            let container = document.getElementById('nutrition-container2');
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'nutrition_info2[]';
+            input.classList.add('w-full', 'p-2', 'border', 'rounded', 'mb-2');
+            container.appendChild(input);
+        }
+
+
+        function addNutrition3() {
+            let container = document.getElementById('nutrition-container3');
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'excercise_outcome[]';
             input.classList.add('w-full', 'p-2', 'border', 'rounded', 'mb-2');
             container.appendChild(input);
         }
